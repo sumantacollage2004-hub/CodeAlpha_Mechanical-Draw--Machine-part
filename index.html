@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mechanical Drawing – Flanged Bearing Housing</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ── TOP TOOLBAR ────────────────────────────── -->
+  <header class="toolbar">
+    <div class="tb-brand">
+      <div class="tb-logo">⬡</div>
+      <div class="tb-titles">
+        <span class="tb-sub">TECHNICAL DRAWING · SHEET 1 OF 1</span>
+        <span class="tb-main">FLANGED BEARING HOUSING</span>
+      </div>
+    </div>
+
+    <nav class="tb-views">
+      <button class="view-btn active" data-view="all">ALL VIEWS</button>
+      <button class="view-btn" data-view="front">FRONT</button>
+      <button class="view-btn" data-view="top">TOP</button>
+      <button class="view-btn" data-view="side">SIDE</button>
+    </nav>
+
+    <div class="tb-actions">
+      <button class="action-btn" id="toggleDim">⊕ DIMS ON</button>
+      <button class="action-btn" id="toggleHidden">◌ HIDDEN ON</button>
+      <button class="action-btn export-btn" id="btnPDF">↓ PDF</button>
+      <button class="action-btn export-btn" id="btnDXF">↓ DXF/DWG</button>
+    </div>
+  </header>
+
+  <!-- ── MAIN LAYOUT ─────────────────────────────── -->
+  <div class="app-body">
+
+    <!-- LEFT: PARTS LIST / NOTES -->
+    <aside class="left-panel">
+      <section class="panel-section">
+        <div class="panel-heading">BILL OF MATERIALS</div>
+        <table class="bom-table">
+          <thead><tr><th>#</th><th>PART</th><th>MAT.</th><th>QTY</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Housing Body</td><td>CI</td><td>1</td></tr>
+            <tr><td>2</td><td>Bearing Bore</td><td>—</td><td>1</td></tr>
+            <tr><td>3</td><td>Flange</td><td>CI</td><td>1</td></tr>
+            <tr><td>4</td><td>Bolt Holes</td><td>—</td><td>4</td></tr>
+            <tr><td>5</td><td>Oil Port</td><td>—</td><td>1</td></tr>
+            <tr><td>6</td><td>Keyway</td><td>—</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">TOLERANCES</div>
+        <div class="tol-grid">
+          <div class="tol-row"><span>Bore Dia.</span><span class="tol-val">Ø80 H7</span></div>
+          <div class="tol-row"><span>Flange Dia.</span><span class="tol-val">Ø180±0.1</span></div>
+          <div class="tol-row"><span>Housing OD</span><span class="tol-val">Ø120±0.2</span></div>
+          <div class="tol-row"><span>Bolt PCD</span><span class="tol-val">Ø150±0.05</span></div>
+          <div class="tol-row"><span>Bolt Holes</span><span class="tol-val">Ø12 H8</span></div>
+          <div class="tol-row"><span>Flatness</span><span class="tol-val">0.05</span></div>
+          <div class="tol-row"><span>Roughness</span><span class="tol-val">Ra 1.6</span></div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">SURFACE FINISH</div>
+        <div class="finish-block">
+          <div class="finish-row">Bore surface: <span>Ra 0.8 μm</span></div>
+          <div class="finish-row">Flange face: <span>Ra 1.6 μm</span></div>
+          <div class="finish-row">External: <span>Ra 3.2 μm</span></div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">STANDARDS</div>
+        <div class="std-list">
+          <div>ISO 286-1 · Tolerances</div>
+          <div>ISO 1302 · Surface Finish</div>
+          <div>ISO 129-1 · Dimensioning</div>
+          <div>IS 696 · Drawing Practice</div>
+          <div>ASME Y14.5 · GD&T</div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- CENTER: DRAWING CANVAS -->
+    <main class="drawing-area" id="drawingArea">
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="mechCanvas"></canvas>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoomIn">+</button>
+        <span class="zoom-label" id="zoomLabel">100%</span>
+        <button class="zoom-btn" id="zoomOut">−</button>
+        <button class="zoom-btn" id="zoomReset">⌂</button>
+      </div>
+    </main>
+
+    <!-- RIGHT: SPECS PANEL -->
+    <aside class="right-panel">
+      <section class="panel-section">
+        <div class="panel-heading">DIMENSIONS (mm)</div>
+        <table class="dim-table">
+          <tr><td>Housing Length</td><td>160</td></tr>
+          <tr><td>Housing OD</td><td>Ø120</td></tr>
+          <tr><td>Bore ID</td><td>Ø80</td></tr>
+          <tr><td>Flange OD</td><td>Ø180</td></tr>
+          <tr><td>Flange Thickness</td><td>20</td></tr>
+          <tr><td>Wall Thickness</td><td>20</td></tr>
+          <tr><td>Bolt PCD</td><td>Ø150</td></tr>
+          <tr><td>Bolt Hole Dia.</td><td>Ø12</td></tr>
+          <tr><td>No. of Bolts</td><td>4</td></tr>
+          <tr><td>Keyway Width</td><td>22</td></tr>
+          <tr><td>Keyway Depth</td><td>9</td></tr>
+          <tr><td>Oil Port Dia.</td><td>Ø10</td></tr>
+          <tr><td>Chamfer (Bore)</td><td>2×45°</td></tr>
+        </table>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">GD&T CALLOUTS</div>
+        <div class="gdt-list">
+          <div class="gdt-row">
+            <span class="gdt-sym">⊙</span>
+            <span>Bore Cylindricity: 0.02</span>
+          </div>
+          <div class="gdt-row">
+            <span class="gdt-sym">⊥</span>
+            <span>Flange Perp.: 0.05/Ø</span>
+          </div>
+          <div class="gdt-row">
+            <span class="gdt-sym">◎</span>
+            <span>Bore Concentricity: 0.03</span>
+          </div>
+          <div class="gdt-row">
+            <span class="gdt-sym">▭</span>
+            <span>Flatness Flange: 0.05</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">MATERIAL SPEC</div>
+        <div class="mat-block">
+          <div class="mat-row"><span>Grade</span><span>IS 210 FG 260</span></div>
+          <div class="mat-row"><span>Type</span><span>Cast Iron (CI)</span></div>
+          <div class="mat-row"><span>UTS</span><span>260 MPa</span></div>
+          <div class="mat-row"><span>HB</span><span>179–229</span></div>
+          <div class="mat-row"><span>Density</span><span>7.2 g/cm³</span></div>
+          <div class="mat-row"><span>Treatment</span><span>Stress Relieved</span></div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="panel-heading">TITLE BLOCK</div>
+        <div class="title-block-panel">
+          <div class="tb-p-row"><span>PART NAME</span><span>Bearing Housing</span></div>
+          <div class="tb-p-row"><span>DWG NO.</span><span>BH-2026-001</span></div>
+          <div class="tb-p-row"><span>SCALE</span><span>1:2</span></div>
+          <div class="tb-p-row"><span>DRAWN</span><span>AI Studio</span></div>
+          <div class="tb-p-row"><span>DATE</span><span>2026-05-16</span></div>
+          <div class="tb-p-row"><span>REV</span><span>A</span></div>
+          <div class="tb-p-row"><span>PROJECTION</span><span>1st Angle ⊙</span></div>
+        </div>
+      </section>
+    </aside>
+
+  </div>
+
+  <script src="mechdraw.js"></script>
+</body>
+</html>
